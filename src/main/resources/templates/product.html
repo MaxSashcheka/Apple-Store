@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="/static/css/reset.css" th:href="@{/css/reset.css}">
+    <link rel="stylesheet" href="/static/css/bootstrap.css" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}">
+<!--    <link rel="stylesheet" href="/static/css/book/book.css" th:href="@{/css/book/book.css}">-->
+
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Apple Store</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/product">Каталог техники</a>
+                </li>
+                <li class="nav-item">
+                    <a sec:authorize="hasAuthority('customer')" class="nav-link" href="/basket">Корзина</a>
+                </li>
+                <li class="nav-item">
+                    <a sec:authorize="hasAuthority('employee')" class="nav-link" href="/compose-product">Добавить продукт</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">Профиль</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Авторизация</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">Именование устройства</th>
+        <th scope="col">Стоимость</th>
+        <th scope="col">Тип устройства</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}" th:id="'productId'+${product.id}" th:object="${product}">
+        <th scope="row" th:text="*{id}"></th>
+        <td th:text="*{name}"></td>
+        <td th:text="*{price}"></td>
+        <td th:text="*{productType.type}"></td>
+        <td>
+            <button sec:authorize="hasAuthority('customer')"
+                    type="button"
+                    th:attr="onclick=|addToBasket(*{id})|"
+                    class="btn btn-primary">В корзину</button>
+
+            <button sec:authorize="hasAuthority('employee')"
+                    type="button"
+                    th:attr="onclick=|deleteProduct(*{id})|"
+                    class="btn btn-danger">Удалить</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+
+</body>
+<script src="/static/js/bootstrap.bundle.js" th:src="@{/js/bootstrap.bundle.js}"></script>
+<script src="/static/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+<script src="/static/js/jquery-3.2.1.slim.min.js" th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+<script src="/static/js/delete-product/delete-product.js" th:src="@{/js/delete-product/delete-product.js}"></script>
+<script src="/static/js/add-to-basket/add-to-basket.js" th:src="@{/js/add-to-basket/add-to-basket.js}"></script>
+<script src="/static/js/update-product/update-product.js" th:src="@{/js/update-product/update-product.js}"></script>
+
+
+</html>
